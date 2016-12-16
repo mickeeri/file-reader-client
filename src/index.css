@@ -1,0 +1,40 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.FileUploader {
+  width: 600px;
+  height: 200px;
+  margin: 20px;
+}
+
+.FileList {
+  list-style-type: none;
+  padding: 0;
+  width: 500px;
+}
+
+.FileList li {
+  padding: 10px;
+  border: 1px solid #eee;
+}
+
+.FileList li:hover {
+  background-color: #eee;
+}
+
+.DropZone {
+  width: 200px;
+  height: 200px;
+  border-width: 2px;
+  border-color: rgb(102, 102, 102);
+  border-style: dashed;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.DropZone-content {
+  margin-top: 10px;
+}
