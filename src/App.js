@@ -1,19 +1,18 @@
-import React, { Component } from 'react'
-import logo from './logo.svg'
+import React, { PropTypes } from 'react'
 import './App.css'
-import FileUploader from './FileUploader'
+import FileUploader from './containers/FileUploader'
+import { Provider } from 'react-redux'
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <div className="App-header">
-          <h2>Welcome to React file uploader</h2>
-        </div>
-          <FileUploader />
-      </div>
-    )
-  }
+const App = ({store}) => {
+  return (
+    <Provider store={store}>
+      <FileUploader />
+    </Provider>
+  )
+}
+
+App.propTypes = {
+  store: PropTypes.object.isRequired,
 }
 
 export default App

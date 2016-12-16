@@ -26,7 +26,7 @@ body {
 }
 
 .DropZone {
-  width: 200px;
+  width: 100%;
   height: 200px;
   border-width: 2px;
   border-color: rgb(102, 102, 102);
@@ -37,4 +37,23 @@ body {
 
 .DropZone-content {
   margin-top: 10px;
+}
+
+.AlertMessage {
+  padding: 20px;
+  border: 1px solid #eee;
+  margin-bottom: 20px;
+  border-radius: 2px;
+}
+
+.AlertMessage.success {
+  background-color: #dcedc8;
+}
+
+.AlertMessage-close {
+  float: right;
+  font-size: 18px;
+  color: #a99f9f;
+  font-weight: bold;
+  cursor: pointer;
 }

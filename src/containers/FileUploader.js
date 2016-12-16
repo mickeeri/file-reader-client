@@ -1,26 +1,25 @@
 import React, {Component} from 'react'
 import DropZone from 'react-dropzone'
-import FileList from './FileList'
+import FileList from '../components/FileList'
+import {connect} from 'react-redux'
+import * as fileActions from '../actions/fileActions'
+import AlertMessage from './AlertMessage'
 
 class FileUploader extends Component {
-
-  state = {
-    files: [],
-    errors: [],
-  }
-
   onDrop = (files) => {
-    this.setState({files: [...this.state.files, ...files]})
+    this.props.uploadFiles(files)
   }
 
   render() {
-    const {files} = this.state
+    const {files} = this.props
 
     return (
       <div className="FileUploader">
+        <AlertMessage />
         <DropZone
           onDrop={this.onDrop}
           className="DropZone"
+          disablePreview
         >
           <div className="DropZone-content">
             Drop files here
@@ -32,4 +31,8 @@ class FileUploader extends Component {
   }
 }
 
-export default FileUploader
+const mapStateToProps = ({files}) => ({
+  files: files.all,
+})
+
+export default connect(mapStateToProps, fileActions)(FileUploader)
