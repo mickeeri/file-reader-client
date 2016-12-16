@@ -10,7 +10,29 @@ const all = (state = [], action) => {
   }
 }
 
+const showLoader = (state = false, action) => {
+  switch (action.type) {
+    case actionTypes.READ_FILE_START:
+      return true
+    case actionTypes.READ_FILE_FAILURE:
+    case actionTypes.READ_FILE_SUCCESS:
+      return false
+    default:
+      return state
+  }
+}
+
+const text = (state = '', action) => {
+  if (action.text) {
+    return action.text
+  }
+
+  return state
+}
+
 
 export default combineReducers({
   all,
+  showLoader,
+  text,
 })

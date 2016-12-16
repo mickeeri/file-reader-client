@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react'
-import './App.css'
 import FileUploader from './containers/FileUploader'
 import { Provider } from 'react-redux'
 

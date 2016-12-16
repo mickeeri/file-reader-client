@@ -3,7 +3,6 @@ import {connect} from 'react-redux'
 import {closeAlertMessage} from '../actions/messageActions'
 
 const AlertMessage = ({successMessage, errorMessage, dispatch}) => {
-  console.log('Alertmessage success', successMessage)
 
   if (errorMessage && successMessage) {
     return null
