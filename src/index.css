@@ -28,6 +28,14 @@ body {
   cursor: default;
 }
 
+.FileList li.active {
+  background-color: #b3e5fc;
+}
+
+.FileList li.active:hover {
+  background-color: #a0cde2;
+}
+
 .FileList li:hover {
   background-color: #eee;
 }

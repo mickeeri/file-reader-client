@@ -21,7 +21,7 @@ class FileUploader extends Component {
   }
 
   render() {
-    const {files, content, loading, uploading} = this.props
+    const {files, active, loading, uploading} = this.props
 
     return (
       <div className="FileUploader">
@@ -41,10 +41,11 @@ class FileUploader extends Component {
           <FileList
             files={files}
             onReadFile={this.onReadFile}
+            nameOfActive={active.name}
           />
         </div>
         <FileContent
-          content={content}
+          content={active.content}
           loading={loading}
         />
       </div>
@@ -55,14 +56,17 @@ class FileUploader extends Component {
 FileUploader.propTypes = {
   files: PropTypes.array,
   loading: PropTypes.bool.isRequired,
-  content: PropTypes.string.isRequired,
+  active: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
+  }),
   uploading: PropTypes.bool.isRequired,
 }
 
 const mapStateToProps = ({files}) => ({
   files: files.all,
   loading: files.loading,
-  content: files.content,
+  active: files.active,
   uploading: files.uploading,
 })
 

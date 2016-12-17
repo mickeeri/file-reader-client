@@ -11,6 +11,17 @@ const all = (state = [], action) => {
   }
 }
 
+const active = (state = {name: '', content: ''}, action) => {
+  switch (action.type) {
+    case actionTypes.READ_SUCCESS:
+      return action.response
+    case actionTypes.READ_START:
+      return {name: '', content: '' }
+    default:
+      return state
+  }
+}
+
 const uploading = (state = false, action) => {
   switch (action.type) {
     case actionTypes.UPLOAD_REQUEST:
@@ -35,16 +46,9 @@ const loading = (state = false, action) => {
   }
 }
 
-const content = (state = '', action) => {
-  if (action.content) {
-    return action.content
-  }
-  return state
-}
-
 export default combineReducers({
   all,
   loading,
   uploading,
-  content,
+  active,
 })

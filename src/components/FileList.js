@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 
-const FileList = ({files, onReadFile}) => {
+const FileList = ({files, onReadFile, nameOfActive}) => {
 
   if (!files.length) {
     return <p>Inga filer uppladdade</p>
@@ -12,6 +12,7 @@ const FileList = ({files, onReadFile}) => {
         <li
           key={name}
           onClick={() => onReadFile(name)}
+          className={nameOfActive === name && 'active'}
         >
           {name}
         </li>
