@@ -8,12 +8,12 @@ const FileList = ({files, onReadFile}) => {
 
   return (
     <ul className="FileList">
-      {files.map(file =>
+      {files.map(({name}) =>
         <li
-          key={file.name}
-          onClick={() => onReadFile(file)}
+          key={name}
+          onClick={() => onReadFile(name)}
         >
-          {file.name}
+          {name}
         </li>
       )}
     </ul>
@@ -23,7 +23,7 @@ const FileList = ({files, onReadFile}) => {
 FileList.propTypes = {
   files: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
-    size: PropTypes.number.isRequired,
+    length: PropTypes.number.isRequired,
   })).isRequired,
   onReadFile: PropTypes.func.isRequired,
 }

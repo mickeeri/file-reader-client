@@ -1,21 +1,21 @@
 import React, {PropTypes} from 'react'
 import FontAwesome from 'react-fontawesome'
 
-const Loader = ({showLoader = true, text}) => {
-  if (!showLoader) {
+const Loader = ({show = true, text}) => {
+  if (!show) {
     return null
   }
 
   return (
     <div className="Loader">
-      <FontAwesome name="circle-o-notch" spin />
-      {text}
+      <FontAwesome name="spinner" pulse size="3x" />
+      <div className="Loader-text">{text}</div>
     </div>
   )
 }
 
 Loader.propTypes = {
-  showLoader: PropTypes.bool,
+  show: PropTypes.bool,
   text: PropTypes.string,
 }
 

@@ -1,27 +1,32 @@
+import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import * as fileActions from '../actions/fileActions'
 import AlertMessage from './AlertMessage'
 import DropZone from 'react-dropzone'
 import FileContent from '../components/FileContent'
 import FileList from '../components/FileList'
-import React, {Component} from 'react'
+import Loader from '../components/Loader'
 
 class FileUploader extends Component {
+  componentDidMount() {
+    this.props.fetchFiles();
+  }
+
   onDrop = (files) => {
     this.props.uploadFiles(files)
   }
 
-  onReadFile = (file) => {
-    this.props.readFile(file)
+  onReadFile = (fileName) => {
+    this.props.fetchFiles(fileName)
   }
 
   render() {
-    const {files, text, showLoader} = this.props
+    const {files, content, loading, uploading} = this.props
 
     return (
       <div className="FileUploader">
         <div className="DropZone-container">
-          <h1>React file uploader</h1>
+          <h1>React file reader</h1>
           <AlertMessage />
           <DropZone
             onDrop={this.onDrop}
@@ -29,7 +34,8 @@ class FileUploader extends Component {
             disablePreview
           >
             <div className="DropZone-content">
-              Drop files here
+              <p>Drop files here</p>
+              <Loader text="Uploading files" show={uploading} />
             </div>
           </DropZone>
           <FileList
@@ -38,18 +44,26 @@ class FileUploader extends Component {
           />
         </div>
         <FileContent
-          showLoader={showLoader}
-          text={text}
+          content={content}
+          loading={loading}
         />
       </div>
     )
   }
 }
 
+FileUploader.propTypes = {
+  files: PropTypes.array,
+  loading: PropTypes.bool.isRequired,
+  content: PropTypes.string.isRequired,
+  uploading: PropTypes.bool.isRequired,
+}
+
 const mapStateToProps = ({files}) => ({
   files: files.all,
-  showLoader: files.showLoader,
-  text: files.text,
+  loading: files.loading,
+  content: files.content,
+  uploading: files.uploading,
 })
 
 export default connect(mapStateToProps, fileActions)(FileUploader)

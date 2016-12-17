@@ -56,6 +56,10 @@ body {
   background-color: #dcedc8;
 }
 
+.AlertMessage.error {
+  background-color: #ffcdd2;
+}
+
 .AlertMessage-close {
   float: right;
   font-size: 18px;
@@ -70,6 +74,12 @@ body {
   padding: 50px;
 }
 
-.Loader .fa {
-  margin-right: 5px;
+.Loader {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.Loader-text {
+  margin-top: 5px;
+  color: #8e7c7c;
 }
