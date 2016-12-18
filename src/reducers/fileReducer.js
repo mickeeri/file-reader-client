@@ -11,12 +11,14 @@ const all = (state = [], action) => {
   }
 }
 
-const active = (state = {name: '', content: ''}, action) => {
+const initalResultState = {fileName: '', processedContent: '', mostCommonWord: ''}
+
+const result = (state = initalResultState, action) => {
   switch (action.type) {
     case actionTypes.READ_SUCCESS:
       return action.response
     case actionTypes.READ_START:
-      return {name: '', content: '' }
+      return initalResultState
     default:
       return state
   }
@@ -50,5 +52,5 @@ export default combineReducers({
   all,
   loading,
   uploading,
-  active,
+  result,
 })

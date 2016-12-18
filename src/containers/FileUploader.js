@@ -17,11 +17,11 @@ class FileUploader extends Component {
   }
 
   onReadFile = (fileName) => {
-    this.props.fetchFiles(fileName)
+    this.props.readFile(fileName)
   }
 
   render() {
-    const {files, active, loading, uploading} = this.props
+    const {files, result, loading, uploading} = this.props
 
     return (
       <div className="FileUploader">
@@ -41,11 +41,11 @@ class FileUploader extends Component {
           <FileList
             files={files}
             onReadFile={this.onReadFile}
-            nameOfActive={active.name}
+            nameOfActive={result.fileName}
           />
         </div>
         <FileContent
-          content={active.content}
+          result={result}
           loading={loading}
         />
       </div>
@@ -56,9 +56,10 @@ class FileUploader extends Component {
 FileUploader.propTypes = {
   files: PropTypes.array,
   loading: PropTypes.bool.isRequired,
-  active: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
+  result: PropTypes.shape({
+    fileName: PropTypes.string.isRequired,
+    processedContent: PropTypes.string.isRequired,
+    mostCommonWord: PropTypes.string.isRequired,
   }),
   uploading: PropTypes.bool.isRequired,
 }
@@ -66,7 +67,7 @@ FileUploader.propTypes = {
 const mapStateToProps = ({files}) => ({
   files: files.all,
   loading: files.loading,
-  active: files.active,
+  result: files.result,
   uploading: files.uploading,
 })
 

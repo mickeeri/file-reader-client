@@ -43,23 +43,46 @@ const makePostRequest = (files) => {
   })
 }
 
-export const fetchFiles = (fileName) => (dispatch) => {
+// Fetch and process single file.
+export const readFile = (fileName) => (dispatch) => {
 
-  const url = `${API_ROOT}${fileName ? `/${fileName}` : ''}`
+  dispatch({ type: actionTypes.READ_START })
 
-  dispatch({ type: fileName ? actionTypes.READ_START : actionTypes.FETCH_REQUEST })
+  const url = `${API_ROOT}/${fileName}`
 
   return makeGetRequest(url).then(
     response => {
       dispatch({
-        type: fileName ? actionTypes.READ_SUCCESS : actionTypes.FETCH_SUCCESS,
+        type: actionTypes.READ_SUCCESS,
         response,
-        content: response.content,
       })
     },
     error => {
       dispatch({
-        type: fileName ? actionTypes.READ_FAILURE : actionTypes.FETCH_FAILURE,
+        type: actionTypes.READ_FAILURE,
+        errorMessage: error.message || 'Error while reading file',
+      })
+    }
+  )
+}
+
+// Fetch all files uploaded to server.
+export const fetchFiles = (fileName) => (dispatch) => {
+
+  const url = `${API_ROOT}${fileName ? `/${fileName}` : ''}`
+
+  dispatch({ type: actionTypes.FETCH_REQUEST })
+
+  return makeGetRequest(API_ROOT).then(
+    response => {
+      dispatch({
+        type: actionTypes.FETCH_SUCCESS,
+        response,
+      })
+    },
+    error => {
+      dispatch({
+        type: actionTypes.FETCH_FAILURE,
         errorMessage: error.message || 'Error while fetching files'
       })
     }
@@ -83,31 +106,4 @@ export const uploadFiles = (files) => (dispatch) => {
       })
     }
   )
-}
-
-
-
-export const readFile = (file) => (dispatch) => {
-  dispatch({ type: actionTypes.READ_START })
-
-  const fileReader = new FileReader()
-
-  fileReader.onloadend = (e) => {
-    dispatch({
-      type: actionTypes.READ_SUCCESS,
-      text: e.target.result,
-      successMessage: 'File loaded',
-    })
-  }
-
-  fileReader.onerror = (err) => {
-    console.error(err)
-
-    dispatch({
-      actionTypes: actionTypes.READ_FAILURE,
-      errorMessage: err.message || 'Failed to read file',
-    })
-  }
-
-  fileReader.readAsText(file)
 }

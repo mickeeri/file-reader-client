@@ -91,3 +91,7 @@ body {
   margin-top: 5px;
   color: #8e7c7c;
 }
+
+.highlight {
+  background-color: yellow;
+}
