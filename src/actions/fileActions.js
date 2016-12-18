@@ -4,7 +4,6 @@ import fetch from 'isomorphic-fetch'
 const API_ROOT = 'http://localhost:5000/api/files'
 
 const makeGetRequest = (url) => {
-
   return fetch(url).then(response => {
     return response.json().then(data => {
       if (response.ok) {
@@ -12,9 +11,14 @@ const makeGetRequest = (url) => {
       } else {
         return Promise.reject({
           status: response.status,
-          message: data.message
+          message: response.message,
         })
       }
+    })
+  })
+  .catch(ex => {
+    return Promise.reject({
+      message: 'Could not fetch files from server.'
     })
   })
 }
@@ -36,9 +40,14 @@ const makePostRequest = (files) => {
       } else {
         return Promise.reject({
           status: response.status,
-          message: data.message,
+          message: 'Upus',
         })
       }
+    })
+  })
+  .catch(ex => {
+    return Promise.reject({
+      message: 'Could not upload files to server.'
     })
   })
 }
@@ -89,10 +98,35 @@ export const fetchFiles = (fileName) => (dispatch) => {
   )
 }
 
-export const uploadFiles = (files) => (dispatch) => {
+export const uploadFiles = (files) => (dispatch, getState) => {
+
+  // Validate file type.
+  const allowedFormats = ['text/markdown', 'application/rtf', 'text/plain']
+  const fileTypes = files.map(file => file.type)
+  if (fileTypes.some(fileType => allowedFormats.indexOf(fileType) === -1)) {
+    dispatch({
+      type: actionTypes.UPLOAD_FAILURE,
+      errorMessage: 'File format not allowed',
+    })
+
+    return Promise.resolve()
+  }
+
+  // Filter out all the files already uploaded.
+  const filesToUpload = files.filter(file => {
+    const fileNamesInStore = getState().files.all.map(file => file.name)
+    const notInStore = fileNamesInStore.indexOf(file.name) === -1
+    return notInStore
+  })
+
+  // Don't make request if no files left to upload.
+  if (!filesToUpload.length) {
+    return Promise.resolve()
+  }
+
   dispatch({ type: actionTypes.UPLOAD_REQUEST })
 
-  return makePostRequest(files).then(
+  return makePostRequest(filesToUpload).then(
     response => {
       dispatch({
         type: actionTypes.UPLOAD_SUCCESS,
