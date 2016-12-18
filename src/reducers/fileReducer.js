@@ -11,7 +11,7 @@ const all = (state = [], action) => {
   }
 }
 
-const initalResultState = {fileName: '', processedContent: '', mostCommonWord: ''}
+const initalResultState = {fileName: '', processedContent: '', mostCommonWords: []}
 
 const result = (state = initalResultState, action) => {
   switch (action.type) {

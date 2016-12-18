@@ -2,10 +2,12 @@ import React, {PropTypes} from 'react'
 import Loader from './Loader'
 import Highlighter from 'react-highlight-words'
 
-export const FileContent = ({result: {processedContent, mostCommonWord}, loading}) => {
+export const FileContent = ({result: {processedContent, mostCommonWords}, loading}) => {
   if (!loading && !processedContent) {
     return null
   }
+
+  const searchWords = mostCommonWords.map(word => `foo${word}bar`)
 
   return (
     <div className="FileContent">
@@ -13,7 +15,7 @@ export const FileContent = ({result: {processedContent, mostCommonWord}, loading
         <Loader text="Reading file" /> :
         <Highlighter
           textToHighlight={processedContent}
-          searchWords={[`foo${mostCommonWord}bar`]}
+          searchWords={searchWords}
           activeClassName="highlight"
         />
       }
@@ -22,7 +24,7 @@ export const FileContent = ({result: {processedContent, mostCommonWord}, loading
 }
 
 FileContent.propTypes = {
-  content: PropTypes.string,
+  result: PropTypes.object,
   loading: PropTypes.bool.isRequired,
 }
 

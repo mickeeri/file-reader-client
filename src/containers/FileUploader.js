@@ -59,7 +59,7 @@ FileUploader.propTypes = {
   result: PropTypes.shape({
     fileName: PropTypes.string.isRequired,
     processedContent: PropTypes.string.isRequired,
-    mostCommonWord: PropTypes.string.isRequired,
+    mostCommonWords: PropTypes.array.isRequired,
   }),
   uploading: PropTypes.bool.isRequired,
 }
