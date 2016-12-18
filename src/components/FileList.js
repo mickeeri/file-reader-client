@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react'
+import FontAwesome from 'react-fontawesome'
 
-const FileList = ({files, onReadFile, nameOfActive}) => {
+const FileList = ({files, onReadFile, nameOfActive, onDeleteFile}) => {
 
   if (!files.length) {
     return <p>Inga filer uppladdade</p>
@@ -11,10 +12,19 @@ const FileList = ({files, onReadFile, nameOfActive}) => {
       {files.map(({name}) =>
         <li
           key={name}
-          onClick={() => onReadFile(name)}
           className={nameOfActive === name && 'active'}
         >
-          {name}
+          <span
+            className="name-field"
+            onClick={() => onReadFile(name)}
+          >
+            {name}
+          </span>
+          <FontAwesome
+            className="delete-button"
+            name="trash"
+            onClick={() => onDeleteFile(name)}
+          />
         </li>
       )}
     </ul>
@@ -27,6 +37,7 @@ FileList.propTypes = {
     length: PropTypes.number.isRequired,
   })).isRequired,
   onReadFile: PropTypes.func.isRequired,
+  onDeleteFile: PropTypes.func.isRequired,
 }
 
 export default FileList

@@ -23,9 +23,26 @@ body {
 }
 
 .FileList li {
-  padding: 10px;
   border: 1px solid #eee;
+  display: flex;
   cursor: default;
+}
+
+.FileList li .delete-button {
+  width: 5%;
+  text-align: right;
+  color: #ef9a9a;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.FileList li .delete-button:hover {
+  color: #e57373;
+}
+
+.FileList li .name-field {
+  width: 95%;
+  padding: 10px;
 }
 
 .FileList li.active {

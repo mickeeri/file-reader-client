@@ -20,6 +20,10 @@ class FileUploader extends Component {
     this.props.readFile(fileName)
   }
 
+  onDeleteFile = (fileName) => {
+    this.props.deleteFile(fileName)
+  }
+
   render() {
     const {files, result, loading, uploading} = this.props
 
@@ -42,6 +46,7 @@ class FileUploader extends Component {
             files={files}
             onReadFile={this.onReadFile}
             nameOfActive={result.fileName}
+            onDeleteFile={this.onDeleteFile}
           />
         </div>
         <FileContent

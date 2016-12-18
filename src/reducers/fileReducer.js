@@ -6,6 +6,10 @@ const all = (state = [], action) => {
     case actionTypes.UPLOAD_SUCCESS:
     case actionTypes.FETCH_SUCCESS:
       return [...state, ...action.response]
+    case actionTypes.DELETE_SUCCESS:
+      return state.filter(file => {
+        return file.name !== action.fileName
+      })
     default:
       return state
   }
@@ -19,6 +23,12 @@ const result = (state = initalResultState, action) => {
       return action.response
     case actionTypes.READ_START:
       return initalResultState
+    case actionTypes.DELETE_SUCCESS:
+      if (action.fileName === state.fileName) {
+        return initalResultState
+      } else {
+        return state
+      }
     default:
       return state
   }

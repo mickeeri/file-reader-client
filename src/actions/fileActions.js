@@ -23,6 +23,27 @@ const makeGetRequest = (url) => {
   })
 }
 
+const makeDeleteRequest = (url) => {
+  return fetch(url, {
+    method: 'DELETE'
+  })
+  .then(response => {
+    if (response.ok) {
+      return Promise.resolve()
+    } else {
+      return Promise.reject({
+        status: response.status,
+        message: response.message,
+      })
+    }
+  })
+  .catch(ex => {
+    return Promise.reject({
+      message: 'Could not delete file'
+    })
+  })
+}
+
 const makePostRequest = (files) => {
   const formData = new FormData()
   files.forEach(file => {
@@ -40,7 +61,7 @@ const makePostRequest = (files) => {
       } else {
         return Promise.reject({
           status: response.status,
-          message: 'Upus',
+          message: response.message,
         })
       }
     })
@@ -77,8 +98,6 @@ export const readFile = (fileName) => (dispatch) => {
 
 // Fetch all files uploaded to server.
 export const fetchFiles = (fileName) => (dispatch) => {
-
-  const url = `${API_ROOT}${fileName ? `/${fileName}` : ''}`
 
   dispatch({ type: actionTypes.FETCH_REQUEST })
 
@@ -130,6 +149,7 @@ export const uploadFiles = (files) => (dispatch, getState) => {
     response => {
       dispatch({
         type: actionTypes.UPLOAD_SUCCESS,
+        successMessage: 'Files uploaded',
         response,
       })
     },
@@ -137,6 +157,28 @@ export const uploadFiles = (files) => (dispatch, getState) => {
       dispatch({
         type: actionTypes.UPLOAD_FAILURE,
         errorMessage: error.message || 'Error while uploading file'
+      })
+    }
+  )
+}
+
+export const deleteFile = (fileName) => (dispatch) => {
+  dispatch({ type: actionTypes.DELETE_REQUEST })
+
+  const url = `${API_ROOT}/${fileName}`
+
+  return makeDeleteRequest(url).then(
+    response => {
+      dispatch({
+        type: actionTypes.DELETE_SUCCESS,
+        successMessage: 'File deleted',
+        fileName,
+      })
+    },
+    error => {
+      dispatch({
+        type: actionTypes.DELETE_FAILURE,
+        errorMessage: error.message || 'Could not delete file'
       })
     }
   )
