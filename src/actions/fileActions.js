@@ -3,84 +3,36 @@ import fetch from 'isomorphic-fetch'
 
 const API_ROOT = 'http://localhost:5000/api/files'
 
-const makeGetRequest = (url) => {
-  return fetch(url).then(response => {
-    return response.json().then(data => {
-      if (response.ok) {
-        return data
-      } else {
-        return Promise.reject({
-          status: response.status,
-          message: response.message,
-        })
-      }
-    })
-  })
-  .catch(ex => {
-    return Promise.reject({
-      message: 'Could not fetch files from server.'
-    })
-  })
-}
-
-const makeDeleteRequest = (url) => {
-  return fetch(url, {
-    method: 'DELETE'
+const makeFetchRequest = ({url = API_ROOT, method = 'GET', body = null }) => {
+  return fetch(url,{
+    method,
+    body,
   })
   .then(response => {
     if (response.ok) {
-      return Promise.resolve()
+      if (response.status === 204) {
+        return Promise.resolve()
+      } else {
+        return response.json().then(data => data)
+      }
     } else {
       return Promise.reject({
-        status: response.status,
-        message: response.message,
+        message: `Something went wrong: ${response.status} ${response.statusText}`
       })
     }
   })
-  .catch(ex => {
+  .catch(error => {
     return Promise.reject({
-      message: 'Could not delete file'
-    })
-  })
-}
-
-const makePostRequest = (files) => {
-  const formData = new FormData()
-  files.forEach(file => {
-    formData.append(file.name, file)
-  })
-
-  return fetch(API_ROOT, {
-    method: 'POST',
-    body: formData,
-  })
-  .then(response => {
-    return response.json().then(data => {
-      if (response.ok) {
-        return data
-      } else {
-        return Promise.reject({
-          status: response.status,
-          message: response.message,
-        })
-      }
-    })
-  })
-  .catch(ex => {
-    return Promise.reject({
-      message: 'Could not upload files to server.'
+      message: error.message || 'Something went wrong'
     })
   })
 }
 
 // Fetch and process single file.
 export const readFile = (fileName) => (dispatch) => {
-
   dispatch({ type: actionTypes.READ_START })
 
-  const url = `${API_ROOT}/${fileName}`
-
-  return makeGetRequest(url).then(
+  return makeFetchRequest({url: `${API_ROOT}/${fileName}`}).then(
     response => {
       dispatch({
         type: actionTypes.READ_SUCCESS,
@@ -90,7 +42,7 @@ export const readFile = (fileName) => (dispatch) => {
     error => {
       dispatch({
         type: actionTypes.READ_FAILURE,
-        errorMessage: error.message || 'Error while reading file',
+        errorMessage: error.message,
       })
     }
   )
@@ -101,7 +53,7 @@ export const fetchFiles = (fileName) => (dispatch) => {
 
   dispatch({ type: actionTypes.FETCH_REQUEST })
 
-  return makeGetRequest(API_ROOT).then(
+  return makeFetchRequest().then(
     response => {
       dispatch({
         type: actionTypes.FETCH_SUCCESS,
@@ -111,7 +63,7 @@ export const fetchFiles = (fileName) => (dispatch) => {
     error => {
       dispatch({
         type: actionTypes.FETCH_FAILURE,
-        errorMessage: error.message || 'Error while fetching files'
+        errorMessage: error.message,
       })
     }
   )
@@ -125,7 +77,7 @@ export const uploadFiles = (files) => (dispatch, getState) => {
   if (fileTypes.some(fileType => allowedFormats.indexOf(fileType) === -1)) {
     dispatch({
       type: actionTypes.UPLOAD_FAILURE,
-      errorMessage: 'File format not allowed',
+      errorMessage: 'File type not allowed',
     })
 
     return Promise.resolve()
@@ -145,7 +97,13 @@ export const uploadFiles = (files) => (dispatch, getState) => {
 
   dispatch({ type: actionTypes.UPLOAD_REQUEST })
 
-  return makePostRequest(filesToUpload).then(
+  // Post the files as FormData
+  const body = new FormData()
+  files.forEach(file => {
+    body.append(file.name, file)
+  })
+
+  return makeFetchRequest({body, method: 'POST'}).then(
     response => {
       dispatch({
         type: actionTypes.UPLOAD_SUCCESS,
@@ -163,11 +121,10 @@ export const uploadFiles = (files) => (dispatch, getState) => {
 }
 
 export const deleteFile = (fileName) => (dispatch) => {
+
   dispatch({ type: actionTypes.DELETE_REQUEST })
 
-  const url = `${API_ROOT}/${fileName}`
-
-  return makeDeleteRequest(url).then(
+  return makeFetchRequest({url: `${API_ROOT}/${fileName}`, method: 'DELETE'}).then(
     response => {
       dispatch({
         type: actionTypes.DELETE_SUCCESS,
@@ -178,7 +135,7 @@ export const deleteFile = (fileName) => (dispatch) => {
     error => {
       dispatch({
         type: actionTypes.DELETE_FAILURE,
-        errorMessage: error.message || 'Could not delete file'
+        errorMessage: error.message,
       })
     }
   )
