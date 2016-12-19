@@ -53,7 +53,7 @@ export const fetchFiles = (fileName) => (dispatch) => {
 
   dispatch({ type: actionTypes.FETCH_REQUEST })
 
-  return makeFetchRequest().then(
+  return makeFetchRequest({}).then(
     response => {
       dispatch({
         type: actionTypes.FETCH_SUCCESS,
