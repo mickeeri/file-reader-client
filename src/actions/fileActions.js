@@ -23,7 +23,7 @@ const makeFetchRequest = ({url = API_ROOT, method = 'GET', body = null }) => {
   })
   .catch(error => {
     return Promise.reject({
-      message: error.message || 'Something went wrong'
+      message: error.message === 'Failed to fetch' ? 'Something went wrong' : error.message
     })
   })
 }
