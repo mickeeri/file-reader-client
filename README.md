@@ -1,4 +1,5 @@
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+### File reader
 
-Below you will find some information on how to perform common tasks.<br>
-You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
+React & Redux application that let's you upload text files and highlight certain words.
+
+Find the .NET Core API for this client side application [here](https://github.com/mickeeri/file-reader-api).
