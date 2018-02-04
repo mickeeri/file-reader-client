@@ -1,7 +1,7 @@
-import * as actionTypes from './actionTypes'
+import * as actionTypes from './actionTypes';
 
 export const closeAlertMessage = () => {
-  return ({
+  return {
     type: actionTypes.RESET_MESSAGE,
-  })
-}
+  };
+};
